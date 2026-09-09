@@ -105,17 +105,13 @@ def test_entry_absorbs_with_the_grown_threshold_and_keeps_the_new_one():
     model = feed(build_improved_birch(initial_threshold=1.0), [0.0, 1.0, 2.5])
 
     assert len(model.micro_clusters) == 1
-    assert_feature_properties(
-        model.micro_clusters[0], center=[7.0 / 6.0], n=3.0, threshold=2.0
-    )
+    assert_feature_properties(model.micro_clusters[0], center=[7.0 / 6.0], n=3.0, threshold=2.0)
     assert model.n_threshold_growths == 1
     assert model.n_neighbor_merges == 0
 
 
 def test_grown_threshold_absorbs_the_nearest_neighbour_entry():
-    model = feed(
-        build_improved_birch(initial_threshold=1.0, leaf_capacity=10), [0.0, 2.4, 1.2]
-    )
+    model = feed(build_improved_birch(initial_threshold=1.0, leaf_capacity=10), [0.0, 2.4, 1.2])
 
     assert len(model.micro_clusters) == 1
     assert_feature_properties(model.micro_clusters[0], center=[1.2], n=3.0, threshold=2.0)
@@ -124,9 +120,7 @@ def test_grown_threshold_absorbs_the_nearest_neighbour_entry():
 
 
 def test_neighbour_out_of_reach_of_the_grown_threshold_survives():
-    model = feed(
-        build_improved_birch(initial_threshold=0.5, leaf_capacity=10), [0.0, 2.0, 1.0]
-    )
+    model = feed(build_improved_birch(initial_threshold=0.5, leaf_capacity=10), [0.0, 2.0, 1.0])
 
     assert len(model.micro_clusters) == 2
     assert_feature_properties(model.micro_clusters[0], center=[0.5], n=2.0, threshold=1.0)
@@ -153,9 +147,7 @@ def test_new_entries_still_start_at_the_initial_threshold_after_a_growth():
 
 def test_thresholds_diverge_across_leaf_entries():
     generator = random.Random(4)
-    model = build_improved_birch(
-        initial_threshold=0.4, branching_factor=6, leaf_capacity=6
-    )
+    model = build_improved_birch(initial_threshold=0.4, branching_factor=6, leaf_capacity=6)
 
     for _ in range(500):
         model.learn_one({0: generator.uniform(0, 20)})
@@ -165,9 +157,7 @@ def test_thresholds_diverge_across_leaf_entries():
 
 
 def test_a_tie_between_equidistant_entries_is_broken_by_lowest_index():
-    model = feed(
-        build_improved_birch(initial_threshold=0.5, leaf_capacity=10), [0.0, 2.0, 1.0]
-    )
+    model = feed(build_improved_birch(initial_threshold=0.5, leaf_capacity=10), [0.0, 2.0, 1.0])
 
     assert_feature_properties(model.micro_clusters[0], center=[0.5], n=2.0)
     assert_feature_properties(model.micro_clusters[1], center=[2.0], n=1.0)
@@ -187,9 +177,7 @@ def test_the_effective_modifying_factor_decreases_as_the_threshold_grows():
 
 
 def test_a_modifying_factor_of_one_freezes_every_threshold():
-    model = feed(
-        build_improved_birch(initial_threshold=1.0, modifying_factor=1.0), [0.0, 1.0, 2.5]
-    )
+    model = feed(build_improved_birch(initial_threshold=1.0, modifying_factor=1.0), [0.0, 1.0, 2.5])
 
     assert model.threshold_step == 0.0
     assert len(model.micro_clusters) == 2
@@ -199,9 +187,7 @@ def test_a_modifying_factor_of_one_freezes_every_threshold():
 
 def test_the_neighbour_merge_can_push_an_entry_past_its_own_threshold():
     model = feed(
-        build_improved_birch(
-            initial_threshold=1.0, modifying_factor=3.0, leaf_capacity=10
-        ),
+        build_improved_birch(initial_threshold=1.0, modifying_factor=3.0, leaf_capacity=10),
         [1.477, 5.243, 5.989, 0.933, 5.234, 2.945],
     )
 
@@ -215,9 +201,7 @@ def test_the_neighbour_merge_can_push_an_entry_past_its_own_threshold():
 
 def test_the_neighbour_merge_preserves_the_path_summaries():
     generator = random.Random(5)
-    model = build_improved_birch(
-        initial_threshold=0.3, branching_factor=4, leaf_capacity=4
-    )
+    model = build_improved_birch(initial_threshold=0.3, branching_factor=4, leaf_capacity=4)
 
     for _ in range(800):
         model.learn_one({0: generator.uniform(0, 10), 1: generator.uniform(0, 10)})
@@ -253,9 +237,7 @@ def test_root_split_increases_the_height():
 
 def test_path_features_summarise_their_children_on_a_random_stream():
     generator = random.Random(0)
-    model = build_improved_birch(
-        initial_threshold=0.5, branching_factor=4, leaf_capacity=4
-    )
+    model = build_improved_birch(initial_threshold=0.5, branching_factor=4, leaf_capacity=4)
 
     for _ in range(1_000):
         model.learn_one({0: generator.uniform(0, 10), 1: generator.uniform(0, 10)})

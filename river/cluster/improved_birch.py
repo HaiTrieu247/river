@@ -545,9 +545,7 @@ class ImprovedBIRCHClusteringFeature:
             self.linear_sum.extend([0.0] * missing)
             self.squared_sum.extend([0.0] * missing)
 
-    def __iadd__(
-        self, other: ImprovedBIRCHClusteringFeature
-    ) -> ImprovedBIRCHClusteringFeature:
+    def __iadd__(self, other: ImprovedBIRCHClusteringFeature) -> ImprovedBIRCHClusteringFeature:
         self.grow(len(other.linear_sum))
         linear_sum = self.linear_sum
         squared_sum = self.squared_sum
@@ -699,15 +697,11 @@ def _variance_increase(
     return math.sqrt(max(0.0, total * a.n * b.n / (a.n + b.n)))
 
 
-def _merged_radius(
-    a: ImprovedBIRCHClusteringFeature, b: ImprovedBIRCHClusteringFeature
-) -> float:
+def _merged_radius(a: ImprovedBIRCHClusteringFeature, b: ImprovedBIRCHClusteringFeature) -> float:
     return a.merged_radius(b)
 
 
-def _merged_diameter(
-    a: ImprovedBIRCHClusteringFeature, b: ImprovedBIRCHClusteringFeature
-) -> float:
+def _merged_diameter(a: ImprovedBIRCHClusteringFeature, b: ImprovedBIRCHClusteringFeature) -> float:
     return a.merged_diameter(b)
 
 

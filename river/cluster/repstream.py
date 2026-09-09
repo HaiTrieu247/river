@@ -10,80 +10,80 @@ from river import base
 
 class RepStream(base.Clusterer):
     """RepStream
-    
-    The RepStream algorithm is a sparse-graph-based stream clustering approach 
-    that employs representative cluster points to incrementally process incoming data. 
-    The graph-based description allows modelling spatio-temporal relationships 
-    in a data stream more accurately than is possible via summary statistics. 
-    Each cluster is defined by using two types of representative points: 
-    
+
+    The RepStream algorithm is a sparse-graph-based stream clustering approach
+    that employs representative cluster points to incrementally process incoming data.
+    The graph-based description allows modelling spatio-temporal relationships
+    in a data stream more accurately than is possible via summary statistics.
+    Each cluster is defined by using two types of representative points:
+
     * Exemplar points that are used to capture the stable properties of the cluster.
-    
+
     * Predictor points which are used to capture the evolving properties of the cluster.
-    
+
     It also avoids re-discovery of ” previously learned patterns by maximising the
-    reuse of previously useful cluster information, which is captured in a repository 
+    reuse of previously useful cluster information, which is captured in a repository
     of representative points.
-    
+
     The use of repository offers two major benefits:
-    
-    * Effectively handle recurrent changes in the clusters, by storing a concise 
+
+    * Effectively handle recurrent changes in the clusters, by storing a concise
     representation of persistent and consistent cluster features.
-    
-    * Provides a concise knowledge collection that can be used to rebuild a 
+
+    * Provides a concise knowledge collection that can be used to rebuild a
     cluster’s overall shape and data distribution history. Therefore, it is possible
     to archive core cluster features when a recall of historical changes is desired.
-    
+
     For a new point `p`:
-    
-    * Insert `p` into the sparse graph and update the graph structure. Find the `k` 
+
+    * Insert `p` into the sparse graph and update the graph structure. Find the `k`
     nearest neighbors of `p` and link them to `p`. Update SG's edges.
-    
+
     * Checking reciprocal connections between `p` and its neighbors. If there is any
     reciprocal connections, then `p` is a ordinary point. Otherwise, `p` is a representative
     point.
-    
-    * In case `p` is a representative point, it becomes r. Check if it is predictor 
-    or exemplar and update the RSG structure. Calculate the relative density of `r` RD(r). 
+
+    * In case `p` is a representative point, it becomes r. Check if it is predictor
+    or exemplar and update the RSG structure. Calculate the relative density of `r` RD(r).
     Perform the process of merging base on Density-Related Connection Approach.
-    
+
     * Update the repository to store the new representative point `r`. It is positioned
     in the repository based on its usefulness
-    
+
     Because of the Memory Constraint, the number of vertices in the sparse graph is limited.
-    If the number of vertices exceeds the limit, then ordinary points will be removed by 
+    If the number of vertices exceeds the limit, then ordinary points will be removed by
     FIFO approach. Representative points will last longer for future patterns but can also be
     removed if they are not useful.
-    
+
     Parameters
     ----------
     k
         The number of nearest neighbors to consider when constructing the sparse graph.
-    
+
     alpha
         Determines the threshold for density-related connections between representative points.
-    
+
     decay_rate
         This parameter is used to calculate the usefulness of representative points in the repository.
-    
+
     max_vertices
         The maximum number of vertices allowed in the sparse graph, which is an alternative method to
         control the memory usage of the algorithm.
-    
+
     repository_fraction
-        Visualizing the ratio between ordinary points and representative points in the sparse graph. 
+        Visualizing the ratio between ordinary points and representative points in the sparse graph.
         This allow the algorithm to control the performance of removing vertices due to to memory constraint.
-    
+
     distance_measure
         There are two types of distance measures available: "euclidean" and "manhattan". For convenience,
         we perform it as a parameter to allow users to choose the distance measure that is suitable for their data.
-    
-    
+
+
     References
     ----------
-    [^1]: Lühr S, Lazarescu M (2009) Incremental clustering of dynamic data streams using connectivity based 
+    [^1]: Lühr S, Lazarescu M (2009) Incremental clustering of dynamic data streams using connectivity based
     representative points. DataKnowl Eng 68(1):1-27.
-    
+
     Examples
     --------
 
@@ -162,6 +162,7 @@ class RepStream(base.Clusterer):
     2
 
     """
+
     def __init__(
         self,
         k: int = 5,
@@ -245,9 +246,7 @@ class RepStream(base.Clusterer):
         vertices = self._vertices
         measure = self._measure
         candidates = [
-            (measure(values, vertices[i].values), i)
-            for i in self._representatives
-            if i != exclude
+            (measure(values, vertices[i].values), i) for i in self._representatives if i != exclude
         ]
         if len(candidates) <= count:
             candidates.sort()
