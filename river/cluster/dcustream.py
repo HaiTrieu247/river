@@ -183,8 +183,7 @@ class DCUStream(base.Clusterer):
             )
         if decaying_factor < 1:
             raise ValueError(
-                f"The value of `decaying_factor` (currently {decaying_factor}) must be at "
-                "least 1."
+                f"The value of `decaying_factor` (currently {decaying_factor}) must be at least 1."
             )
         if span < 0:
             raise ValueError(f"The value of `span` (currently {span}) must not be negative.")
